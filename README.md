@@ -1,4 +1,4 @@
-This is preliminary java client library to interact with an
+This is a preliminary java client library to interact with an
 MXM service.
 
 Against the MXM API endpoint `http://tsauv.shore.mbari.org/mxm-graphql`
@@ -6,9 +6,6 @@ Against the MXM API endpoint `http://tsauv.shore.mbari.org/mxm-graphql`
 the demo program `MxmClientMain` included in the JAR currently outputs:
 
 ```
-sbt:mxm-java-client> run
-[info] Running MxmClientMain
-
 ==== all executors response ====
     [{
       "executorId": "TFT",
