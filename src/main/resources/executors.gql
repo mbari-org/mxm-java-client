@@ -1,0 +1,6 @@
+{
+  allExecutorsList {
+    executorId
+    description
+  }
+}

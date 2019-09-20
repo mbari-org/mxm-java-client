@@ -1,0 +1,20 @@
+query executor($executorId: String!) {
+  allExecutorsList(condition: {
+    executorId: $executorId
+  }) {
+    executorId
+    description
+    missionTplsByExecutorIdList {
+      missionTplId
+      description
+      missionTplAssetClassesByExecutorIdAndMissionTplIdList {
+        assetClassName
+        assetClassByExecutorIdAndAssetClassName {
+          assetsByExecutorIdAndClassNameList {
+            assetId
+          }
+        }
+      }
+    }
+  }
+}
