@@ -1,0 +1,15 @@
+query missions($executorId: String!) {
+  allMissionsList(condition: {
+    executorId: $executorId
+  }) {
+    executorId
+    missionTplId
+    missionId
+    missionStatus
+    assetId
+    description
+    startDate
+    endDate
+    geometry
+  }
+}

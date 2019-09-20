@@ -2,7 +2,7 @@ organization := "org.mbari"
 
 name := "mxm-java-client"
 
-version := "1.0-SNAPSHOT"
+version := "0.1.0"
 
 libraryDependencies ++= Seq(
     "org.apache.httpcomponents" % "httpclient" % "4.5.10",
@@ -13,6 +13,7 @@ libraryDependencies ++= Seq(
 javacOptions in (Compile, compile) ++= Seq(
     "-source", "1.8", "-target", "1.8", "-g:lines"
 )
+javacOptions in (Compile,doc) ++= Seq("-notimestamp", "-linksource")
 
 crossPaths := false // drop off Scala suffix from artifact names
 autoScalaLibrary := false // exclude scala-library from dependencies

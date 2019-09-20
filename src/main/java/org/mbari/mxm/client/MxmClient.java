@@ -13,6 +13,8 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.mbari.mxm.client.model.Executor;
+import org.mbari.mxm.client.model.Mission;
+import org.mbari.mxm.client.model.MissionTemplate;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,33 +26,22 @@ import java.util.*;
 
 /**
  * High-level MXM API Client.
- * This is initially intended to retrieve information about available
- * "executors" including associated mission templates (and their parameters)
- * and assets.
- * All of this functionality while hiding some of the details about the
- * underlying GraphQL interface.
- * <br/><br/>
  *
- * <b>Status: Preliminary.</b>
+ * <br><br>
+ * <b>Status: Preliminary</b>
+ * <br><br>
  *
- * <br/>
- * <br/>
- * No all model classes are reflected yet.
- * When that's the case, the member in the response will be of generic type
- *    <code>Map&lt;?, ?></code>
- * or
- *    <code>List&lt;Map&lt;?, ?>></code>.
+ * You can use this to retrieve information about available "executors"
+ * (i.e., mission execution systems registered in the MXM service) including
+ * associated mission templates, and their parameters and managed assets, as
+ * well as missions
+ *
+ * Note that some fields in retrieved objects may be `null` or `Optional.empty()`
+ * depending on the particular MxmClient method used to retrieve the object.
+ * In general, more shallow information is provided when the operation is related
+ * with a list of items, and more detailed when specifically requesting a particular item.
  */
 public class MxmClient {
-  
-  static class GetAllExecutorsResponse {
-    Data data;
-    Object errors;
-    
-    static class Data {
-      List<Executor> allExecutorsList;
-    }
-  }
   
   /**
    * Creates an instance.
@@ -61,12 +52,17 @@ public class MxmClient {
     this.endpoint = endpoint;
   }
   
+  public List<Executor> getExecutors() {
+    String query = getQuery("executors.gql");
+    return getExecutors(null, query, null);
+  }
+  
   public Optional<Executor> getExecutor(String executorId) {
     String query = getQuery("executor.gql");
     Map<String, String> variables = new HashMap<>();
     variables.put("executorId", executorId);
     
-    List<Executor> list = _getAllExecutors("executor", query, variables);
+    List<Executor> list = getExecutors("executor", query, variables);
     if (list.size() == 1) {
       return Optional.of(list.get(0));
     }
@@ -76,33 +72,116 @@ public class MxmClient {
     }
   }
   
-  public List<Executor> getAllExecutors() {
-    String query = getQuery("executors.gql");
-    return _getAllExecutors(null, query, null);
+  public Optional<MissionTemplate> getExecutorMissionTemplate(String executorId, String missionTplId) {
+    String query = getQuery("missionTpl.gql");
+    Map<String, String> variables = new HashMap<>();
+    variables.put("executorId", executorId);
+    variables.put("missionTplId", missionTplId);
+    
+    String s = getResponse(null, query, variables);
+
+//    System.out.println("BARE RES:\n  | " + gson.toJson(gson.fromJson(s, Map.class)).replaceAll("\n", "\n  | "));
+    
+    GetMissionTemplateResponse res = gson.fromJson(s, GetMissionTemplateResponse.class);
+    
+    if (res.errors != null) {
+      throw new MxmClientException("Errors reported: " + gson.toJson(res.errors));
+    }
+    
+    if (res.data == null) {
+      throw new MxmClientException("Expecting 'data' object member in response");
+    }
+    
+    if (res.data.missionTplByExecutorIdAndMissionTplId != null) {
+      return Optional.of(res.data.missionTplByExecutorIdAndMissionTplId);
+    }
+    else {
+      return Optional.empty();
+    }
   }
   
-  private List<Executor> _getAllExecutors(String operationName, String query, Map<String, String> variables) {
-    HttpRequestBase req = createRequest(operationName, query, variables);
-    HttpResponse httpResponse = makeRequest(req);
-    String s = getResponseContent(httpResponse);
+  public List<Mission> getExecutorMissions(String executorId, String missionTplId) {
+    String query = getQuery("missions.gql");
+    Map<String, String> variables = new HashMap<>();
+    variables.put("executorId", executorId);
+    variables.put("missionTplId", missionTplId);
+    String s = getResponse("missions", query, variables);
+
+//    System.out.println("BARE RES:\n  | " + gson.toJson(gson.fromJson(s, Map.class)).replaceAll("\n", "\n  | "));
+  
+    GetExecutorMissionsResponse res = gson.fromJson(s, GetExecutorMissionsResponse.class);
+  
+    if (res.errors != null) {
+      throw new MxmClientException("Errors reported: " + gson.toJson(res.errors));
+    }
+  
+    if (res.data == null) {
+      throw new MxmClientException("Expecting 'data' object member in response");
+    }
+  
+    if (res.data.allMissionsList == null) {
+      throw new MxmClientException("Expecting 'allMissionsList' list member in data.");
+    }
+  
+    return res.data.allMissionsList;
+  
+  }
+  
+  public Optional<Mission> getMission(String executorId, String missionTplId, String missionId) {
+    String query = getQuery("mission.gql");
+    Map<String, String> variables = new HashMap<>();
+    variables.put("executorId", executorId);
+    variables.put("missionTplId", missionTplId);
+    variables.put("missionId", missionId);
+  
+    String s = getResponse("mission", query, variables);
+
+//    System.out.println("BARE RES:\n  | " + gson.toJson(gson.fromJson(s, Map.class)).replaceAll("\n", "\n  | "));
+  
+    GetMissionResponse res = gson.fromJson(s, GetMissionResponse.class);
+  
+    if (res.errors != null) {
+      throw new MxmClientException("Errors reported: " + gson.toJson(res.errors));
+    }
+  
+    if (res.data == null) {
+      throw new MxmClientException("Expecting 'data' object member in response");
+    }
+  
+    if (res.data.missionByExecutorIdAndMissionTplIdAndMissionId != null) {
+      return Optional.of(res.data.missionByExecutorIdAndMissionTplIdAndMissionId);
+    }
+    else {
+      return Optional.empty();
+    }
+  }
+  
+  private List<Executor> getExecutors(String operationName, String query, Map<String, String> variables) {
+    String s = getResponse(operationName, query, variables);
   
 //    System.out.println("BARE RES:\n  | " + gson.toJson(gson.fromJson(s, Map.class)).replaceAll("\n", "\n  | "));
     
-    GetAllExecutorsResponse res = gson.fromJson(s, GetAllExecutorsResponse.class);
+    GetExecutorsResponse res = gson.fromJson(s, GetExecutorsResponse.class);
     
     if (res.errors != null) {
-      throw new RuntimeException("Errors reported: " + gson.toJson(res.errors));
+      throw new MxmClientException("Errors reported: " + gson.toJson(res.errors));
     }
 
     if (res.data == null) {
-      throw new RuntimeException("Expecting 'data' object member in response");
+      throw new MxmClientException("Expecting 'data' object member in response");
     }
   
     if (res.data.allExecutorsList == null) {
-      throw new RuntimeException("Expecting 'allExecutorsList' list member in data.");
+      throw new MxmClientException("Expecting 'allExecutorsList' list member in data.");
     }
     
     return res.data.allExecutorsList;
+  }
+  
+  private String getResponse(String operationName, String query, Map<String, String> variables) {
+    HttpRequestBase req = createRequest(operationName, query, variables);
+    HttpResponse httpResponse = makeRequest(req);
+    return getResponseContent(httpResponse);
   }
   
   private HttpRequestBase createRequest(String operationName, String query, Map<String, String> variables) {
@@ -134,25 +213,7 @@ public class MxmClient {
       return builder.build();
     }
     catch (URISyntaxException ex) {
-      throw new RuntimeException(ex);
-    }
-  }
-  
-  private HttpResponse makeRequest(HttpRequestBase request) {
-    request.setHeader("Content-type", "application/json");
-    request.setHeader("Accept", "application/json");
-    //debug("making request: " + request.getURI());
-    int connectTimeout = 3 * 1000;
-    RequestConfig config = RequestConfig.custom()
-        .setConnectTimeout(connectTimeout)
-        .build();
-    HttpClient httpClient = HttpClientBuilder.create()
-        .setDefaultRequestConfig(config).build();
-    try {
-      return httpClient.execute(request);
-    }
-    catch (IOException ex) {
-      throw new RuntimeException(ex);
+      throw new MxmClientException("unexpected", ex);
     }
   }
   
@@ -165,11 +226,29 @@ public class MxmClient {
       return query.replaceAll("\n", "\\\\n");
     }
     catch (Exception ex) {
-      throw new RuntimeException(ex);
+      throw new MxmClientException("unexpected", ex);
     }
   }
   
   private final String endpoint;
+  
+  private static HttpResponse makeRequest(HttpRequestBase request) {
+    request.setHeader("Content-type", "application/json");
+    request.setHeader("Accept", "application/json");
+    //debug("making request: " + request.getURI());
+    int connectTimeout = 7 * 1000;
+    RequestConfig config = RequestConfig.custom()
+        .setConnectTimeout(connectTimeout)
+        .build();
+    HttpClient httpClient = HttpClientBuilder.create()
+        .setDefaultRequestConfig(config).build();
+    try {
+      return httpClient.execute(request);
+    }
+    catch (IOException ex) {
+      throw new MxmClientException("error executing request", ex);
+    }
+  }
   
   private static String getResponseContent(HttpResponse httpResponse)  {
     try {
@@ -179,7 +258,43 @@ public class MxmClient {
       return content;
     }
     catch (Exception ex) {
-      throw new RuntimeException(ex);
+      throw new MxmClientException("error processing response content", ex);
+    }
+  }
+  
+  static class GetExecutorsResponse {
+    Data data;
+    Object errors;
+    
+    static class Data {
+      List<Executor> allExecutorsList;
+    }
+  }
+  
+  static class GetMissionTemplateResponse {
+    Data data;
+    Object errors;
+    
+    static class Data {
+      MissionTemplate missionTplByExecutorIdAndMissionTplId;
+    }
+  }
+  
+  static class GetExecutorMissionsResponse {
+    Data data;
+    Object errors;
+    
+    static class Data {
+      List<Mission> allMissionsList;
+    }
+  }
+  
+  static class GetMissionResponse {
+    Data data;
+    Object errors;
+    
+    static class Data {
+      Mission missionByExecutorIdAndMissionTplIdAndMissionId;
     }
   }
   
