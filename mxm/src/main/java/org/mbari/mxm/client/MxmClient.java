@@ -59,11 +59,18 @@ public class MxmClient {
     this.endpoint = endpoint;
   }
   
+  /**
+   * Gets basic info about the registered mission execution systems.
+   */
   public List<Executor> getExecutors() {
     String query = getQuery("executors.gql");
     return getExecutors(null, query, null);
   }
   
+  /**
+   * Gets details about a registered mission execution system.
+   * @param executorId
+   */
   public Optional<Executor> getExecutor(String executorId) {
     String query = getQuery("executor.gql");
     Map<String, String> variables = new HashMap<>();
@@ -107,6 +114,11 @@ public class MxmClient {
     }
   }
   
+  /**
+   * Gets basic info about the mission instances of a given mission template.
+   * @param executorId
+   * @param missionTplId
+   */
   public List<Mission> getExecutorMissions(String executorId, String missionTplId) {
     String query = getQuery("missions.gql");
     Map<String, String> variables = new HashMap<>();
@@ -134,6 +146,12 @@ public class MxmClient {
   
   }
   
+  /**
+   * Gets details about a particular mission,
+   * @param executorId
+   * @param missionTplId
+   * @param missionId
+   */
   public Optional<Mission> getMission(String executorId, String missionTplId, String missionId) {
     String query = getQuery("mission.gql");
     Map<String, String> variables = new HashMap<>();
@@ -271,7 +289,7 @@ public class MxmClient {
     }
   }
   
-  static class GetExecutorsResponse {
+  private static class GetExecutorsResponse {
     Data data;
     Object errors;
     
@@ -280,7 +298,7 @@ public class MxmClient {
     }
   }
   
-  static class GetMissionTemplateResponse {
+  private static class GetMissionTemplateResponse {
     Data data;
     Object errors;
     
@@ -289,7 +307,7 @@ public class MxmClient {
     }
   }
   
-  static class GetExecutorMissionsResponse {
+  private static class GetExecutorMissionsResponse {
     Data data;
     Object errors;
     
@@ -298,7 +316,7 @@ public class MxmClient {
     }
   }
   
-  static class GetMissionResponse {
+  private static class GetMissionResponse {
     Data data;
     Object errors;
     
