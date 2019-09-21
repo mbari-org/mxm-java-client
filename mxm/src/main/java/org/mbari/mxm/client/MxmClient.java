@@ -44,6 +44,13 @@ import java.util.*;
 public class MxmClient {
   
   /**
+   * Returns the version of the mxm-client library.
+   */
+  public static String getVersion() {
+    return BuildInfo.version;
+  }
+  
+  /**
    * Creates an instance.
    *
    * @param endpoint  MXM API endpoint.

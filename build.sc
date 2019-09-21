@@ -7,12 +7,21 @@
 //
 
 import mill._, scalalib._
+import $ivy.`com.github.carueda::jbuildinfo:0.1.1`
+import com.github.carueda.mill.JBuildInfo
 
-object mxm extends JavaModule {
+object mxm extends JavaModule with JBuildInfo {
     val name = "mxm-client"
     val version = "0.1.0"
 
     def mainClass = Some("MxmClientMain")
+
+    def buildInfoPackageName: Option[String] = Some("org.mbari.mxm.client")
+
+    def buildInfoMembers = Map(
+        "name" → name,
+        "version" → version
+    )
 
     override def ivyDeps = Agg(
         ivy"org.apache.httpcomponents:httpclient:4.5.10",

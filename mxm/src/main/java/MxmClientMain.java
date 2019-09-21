@@ -10,7 +10,7 @@ import java.util.Optional;
  * an MXM service.
  *
  * Assuming your CLASSPATH includes `mxm-java-client-0.1.0.jar` and
- * dependencies including `httpclient-4.5.10.jar` and `gson-2.8.5.jar`,
+ * dependencies `httpclient-4.5.10.jar` and `gson-2.8.5.jar`,
  * you can run it on the command line like this:
  *
  * <code>
@@ -20,6 +20,9 @@ import java.util.Optional;
 public class MxmClientMain {
   public static void main(String[] args) {
     String endpoint = args.length == 1 ? args[0] : "http://tsauv.shore.mbari.org/mxm-graphql";
+  
+    System.out.println("mxm-client library version: " + MxmClient.getVersion());
+    
     MxmClient mxm = new MxmClient(endpoint);
     
     // general info about executors:
