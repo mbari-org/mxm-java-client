@@ -218,14 +218,16 @@ public class MxmClient {
   }
   
   private String getQuery(String resourceName) {
+    ClassLoader cl = getClass().getClassLoader();
+    String name = "org/mbari/mxm/client/" + resourceName;
+    InputStream is = cl.getResourceAsStream(name);
+    assert is != null;
     try {
-      InputStream is = getClass().getClassLoader().getResourceAsStream(resourceName);
-      assert is != null;
       String query = IOUtils.toString(is);
       IOUtils.closeQuietly(is);
       return query.replaceAll("\n", "\\\\n");
     }
-    catch (Exception ex) {
+    catch (IOException ex) {
       throw new MxmClientException("unexpected", ex);
     }
   }
