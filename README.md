@@ -1,16 +1,17 @@
 This project's goal is to build a java client library to allow tools and
 applications to interact with an MXM service.
 
-A GUI of the current MXM service is at http://tsauv.shore.mbari.org/mxm/).
+A GUI of the current MXM service is at http://tsauv.shore.mbari.org/mxm/.
 
 The corresponding API endpoint is `http://tsauv.shore.mbari.org/mxm-graphql`.
 
-*Status*: A preliminary version of the library is already available for
-initial testing (only informational queries at the moment).
+*Status*: A preliminary version of the library is already 
+[available](https://bitbucket.org/mbari/mxm-java-client/downloads/)
+for initial testing (only informational queries at the moment).
 
 The following is the output of the included demo program 
 [`MxmClientMain`](mxm/src/main/java/MxmClientMain.java) when run
-against that API endpoint: 
+against the API endpoint indicated above: 
 
 ```
 ==== all executors response ====
