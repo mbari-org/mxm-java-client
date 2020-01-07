@@ -8,11 +8,12 @@ query ($executorId: String!, $missionTplId: String!) {
         description
       }
     }
-    parametersByExecutorIdAndMissionTplIdList {
+    parametersByExecutorIdAndMissionTplIdList(orderBy: PARAM_ORDER_ASC) {
       paramName
       type
       required
       defaultValue
+      defaultUnits
       description
     }
   }

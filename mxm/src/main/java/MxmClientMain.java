@@ -9,8 +9,8 @@ import java.util.Optional;
  * A simple main program demonstrating some of the operations against
  * an MXM service.
  *
- * Assuming your CLASSPATH includes `mxm-java-client-0.1.0.jar` and
- * dependencies `httpclient-4.5.10.jar` and `gson-2.8.5.jar`,
+ * Assuming your CLASSPATH includes `mxm-java-client-x.y.z.jar` and
+ * the httpclient and gson libraries,
  * you can run it on the command line like this:
  *
  * <code>
@@ -54,12 +54,13 @@ public class MxmClientMain {
           missions.forEach( mBasic -> {
             // more detailed info about each mission:
             Optional<model.Mission> om = mxm.getMission(x.executorId, mtBasic.missionTplId, mBasic.missionId);
+            String label = String.format("MISSION missionTplId='%s' missionId='%s'", mtBasic.missionTplId, mBasic.missionId);
             if (om.isPresent()) {
               model.Mission m = om.get();
-              show("MISSION missionId='" + mBasic.missionId + "'", m);
+              show(label, m);
             }
             else {
-              show("MISSION missionId='" + mBasic.missionId + "'", "not found");
+              show(label, "not found");
             }
           });
         });

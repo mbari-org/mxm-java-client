@@ -1,6 +1,7 @@
-query missions($executorId: String!) {
+query missions($executorId: String!, $missionTplId: String!) {
   allMissionsList(condition: {
     executorId: $executorId
+    missionTplId: $missionTplId
   }) {
     executorId
     missionTplId
@@ -10,6 +11,5 @@ query missions($executorId: String!) {
     description
     startDate
     endDate
-    geometry
   }
 }

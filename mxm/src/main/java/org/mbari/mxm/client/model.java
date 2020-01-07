@@ -25,106 +25,72 @@ public class model {
    * Information about a registered mission execution system.
    */
   public static class Executor extends ModelBase {
-    public final String executorId;
-    public final String description;
+    public String executorId;
+    public String description;
+    public String httpEndpoint;
+    public String apiType;
+    public boolean canValidate;
+    public boolean usesSched;
+    public boolean usesUnits;
   
     @SerializedName(value="missionTemplates", alternate={"missionTplsByExecutorIdList"})
-    public final List<MissionTemplate> missionTemplates;
-  
-    public Executor(String executorId, String description, List<MissionTemplate> missionTemplates) {
-      this.executorId = executorId;
-      this.description = description;
-      this.missionTemplates = missionTemplates;
-    }
+    public List<MissionTemplate> missionTemplates;
   }
   
   /**
    * Information about a particular mission template.
    */
   public static class MissionTemplate extends ModelBase {
-    public final String missionTplId;
-    public final String description;
+    public String missionTplId;
+    public String description;
   
     @SerializedName(value="assetClasses", alternate={"missionTplAssetClassesByExecutorIdAndMissionTplIdList"})
-    public final List<AssetClass> assetClasses;
+    public List<AssetClass> assetClasses;
   
     @SerializedName(value="parameters", alternate={"parametersByExecutorIdAndMissionTplIdList"})
-    public final List<Parameter> parameters;
-  
-    public MissionTemplate(String missionTplId, String description, List<AssetClass> assetClasses, List<Parameter> parameters) {
-      this.missionTplId = missionTplId;
-      this.description = description;
-      this.assetClasses = assetClasses;
-      this.parameters = parameters;
-    }
+    public List<Parameter> parameters;
   }
   
   /**
    * Information about a particular class of assets.
    */
   public static class AssetClass extends ModelBase {
-    public final String assetClassName;
-    public final String description;
-  
-    public AssetClass(String assetClassName, String description) {
-      this.assetClassName = assetClassName;
-      this.description = description;
-    }
+    public String assetClassName;
+    public String description;
   }
   
   /**
    * Information about a particular parameter in a mission template.
    */
   public static class Parameter extends ModelBase {
-    public final String paramName;
-    public final String type;
-    public final String defaultValue;
-    public final boolean required;
-    public final String description;
-  
-    public Parameter(String paramName, String type, String defaultValue, boolean required, String description) {
-      this.paramName = paramName;
-      this.type = type;
-      this.defaultValue = defaultValue;
-      this.required = required;
-      this.description = description;
-    }
+    public String paramName;
+    public String type;
+    public String defaultValue;
+    public String defaultUnits;
+    public boolean required;
+    public String description;
   }
   
   /**
    * Information about a particular mission.
    */
   public static class Mission extends ModelBase {
-    public final String executorId;
-    public final String missionTplId;
-    public final String missionId;
-    public final String assetId;
-    public final String description;
+    public String executorId;
+    public String missionTplId;
+    public String missionId;
+    public String assetId;
+    public String description;
     
     @SerializedName(value="arguments", alternate={"argumentsByExecutorIdAndMissionTplIdAndMissionIdList"})
-    public final List<Argument> arguments;
-  
-    public Mission(String executorId, String missionTplId, String missionId, String assetId, String description, List<Argument> arguments) {
-      this.executorId = executorId;
-      this.missionTplId = missionTplId;
-      this.missionId = missionId;
-      this.assetId = assetId;
-      this.description = description;
-      this.arguments = arguments;
-    }
+    public List<Argument> arguments;
   }
   
   /**
-   * Information about an argument in a particular mission .
+   * Information about an argument in a particular mission.
    */
   public static class Argument extends ModelBase {
-    public final String paramName;
-    public final String paramValue;
-  
-    public Argument(String paramName, String paramValue) {
-      this.paramName = paramName;
-      this.paramValue = paramValue;
-    }
+    public String paramName;
+    public String paramValue;
   }
   
   private model() {}

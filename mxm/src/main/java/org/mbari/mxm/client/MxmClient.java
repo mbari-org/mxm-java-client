@@ -45,9 +45,11 @@ public class MxmClient {
   
   /**
    * Returns the version of the mxm-client library.
+   *
+   * @return the version.
    */
   public static String getVersion() {
-    return BuildInfo.version;
+    return BuildInfo.getVersion();
   }
   
   /**
@@ -61,31 +63,54 @@ public class MxmClient {
   
   /**
    * Gets basic info about the registered mission execution systems.
+   *
+   * @return List of executors.
    */
   public List<Executor> getExecutors() {
     String query = getQuery("executors.gql");
-    return getExecutors(null, query, null);
+    String s = getResponse(null, query, null);
+
+    GetExecutorsResponse res = gson.fromJson(s, GetExecutorsResponse.class);
+  
+    if (res.errors != null) {
+      throw new MxmClientException("Errors reported: " + gson.toJson(res.errors));
+    }
+  
+    if (res.data == null) {
+      throw new MxmClientException("Expecting 'data' object member in response");
+    }
+  
+    if (res.data.allExecutorsList == null) {
+      throw new MxmClientException("Expecting 'allExecutorsList' list member in data.");
+    }
+  
+    return res.data.allExecutorsList;
   }
   
   /**
    * Gets details about a registered mission execution system.
-   * @param executorId
+   *
+   * @param executorId Executor ID
+   * @return Executor or empty if not found
    */
   public Optional<Executor> getExecutor(String executorId) {
     String query = getQuery("executor.gql");
     Map<String, String> variables = new HashMap<>();
     variables.put("executorId", executorId);
+  
+    String s = getResponse("executor", query, variables);
+    GetExecutorResponse res = gson.fromJson(s, GetExecutorResponse.class);
     
-    List<Executor> list = getExecutors("executor", query, variables);
-    if (list.size() == 1) {
-      return Optional.of(list.get(0));
-    }
-    else {
-      assert (list.isEmpty());
-      return Optional.empty();
-    }
+    return Optional.ofNullable(res.data.executorByExecutorId);
   }
   
+  /**
+   * Gets a particular mission template.
+   *
+   * @param executorId Executor ID
+   * @param missionTplId Mission template ID
+   * @return MissionTemplate or empty if not found
+   */
   public Optional<MissionTemplate> getExecutorMissionTemplate(String executorId, String missionTplId) {
     String query = getQuery("missionTpl.gql");
     Map<String, String> variables = new HashMap<>();
@@ -106,18 +131,15 @@ public class MxmClient {
       throw new MxmClientException("Expecting 'data' object member in response");
     }
     
-    if (res.data.missionTplByExecutorIdAndMissionTplId != null) {
-      return Optional.of(res.data.missionTplByExecutorIdAndMissionTplId);
-    }
-    else {
-      return Optional.empty();
-    }
+    return Optional.ofNullable(res.data.missionTplByExecutorIdAndMissionTplId);
   }
   
   /**
    * Gets basic info about the mission instances of a given mission template.
-   * @param executorId
-   * @param missionTplId
+   *
+   * @param executorId Executor ID
+   * @param missionTplId Mission template ID
+   * @return List of missions
    */
   public List<Mission> getExecutorMissions(String executorId, String missionTplId) {
     String query = getQuery("missions.gql");
@@ -147,10 +169,12 @@ public class MxmClient {
   }
   
   /**
-   * Gets details about a particular mission,
-   * @param executorId
-   * @param missionTplId
-   * @param missionId
+   * Gets details about a particular mission.
+   *
+   * @param executorId Executor ID
+   * @param missionTplId Mission template ID
+   * @param missionId Mission ID
+   * @return Mission or empty if not found
    */
   public Optional<Mission> getMission(String executorId, String missionTplId, String missionId) {
     String query = getQuery("mission.gql");
@@ -173,34 +197,7 @@ public class MxmClient {
       throw new MxmClientException("Expecting 'data' object member in response");
     }
   
-    if (res.data.missionByExecutorIdAndMissionTplIdAndMissionId != null) {
-      return Optional.of(res.data.missionByExecutorIdAndMissionTplIdAndMissionId);
-    }
-    else {
-      return Optional.empty();
-    }
-  }
-  
-  private List<Executor> getExecutors(String operationName, String query, Map<String, String> variables) {
-    String s = getResponse(operationName, query, variables);
-  
-//    System.out.println("BARE RES:\n  | " + gson.toJson(gson.fromJson(s, Map.class)).replaceAll("\n", "\n  | "));
-    
-    GetExecutorsResponse res = gson.fromJson(s, GetExecutorsResponse.class);
-    
-    if (res.errors != null) {
-      throw new MxmClientException("Errors reported: " + gson.toJson(res.errors));
-    }
-
-    if (res.data == null) {
-      throw new MxmClientException("Expecting 'data' object member in response");
-    }
-  
-    if (res.data.allExecutorsList == null) {
-      throw new MxmClientException("Expecting 'allExecutorsList' list member in data.");
-    }
-    
-    return res.data.allExecutorsList;
+    return Optional.ofNullable(res.data.missionByExecutorIdAndMissionTplIdAndMissionId);
   }
   
   private String getResponse(String operationName, String query, Map<String, String> variables) {
@@ -295,6 +292,15 @@ public class MxmClient {
     
     static class Data {
       List<Executor> allExecutorsList;
+    }
+  }
+  
+  private static class GetExecutorResponse {
+    Data data;
+    Object errors;
+    
+    static class Data {
+      Executor executorByExecutorId;
     }
   }
   

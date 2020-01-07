@@ -24,11 +24,12 @@ query mission($executorId: String!, $missionTplId: String!, $missionId: String!)
       }
     }
     missionTplByExecutorIdAndMissionTplId {
-      parametersByExecutorIdAndMissionTplIdList {
+      parametersByExecutorIdAndMissionTplIdList(orderBy: PARAM_ORDER_ASC) {
         paramName
         type
         required
         defaultValue
+        defaultUnits
         description
       }
     }

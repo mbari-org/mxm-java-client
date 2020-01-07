@@ -2,5 +2,10 @@
   allExecutorsList {
     executorId
     description
+    httpEndpoint
+    apiType
+    canValidate
+    usesSched
+    usesUnits
   }
 }
