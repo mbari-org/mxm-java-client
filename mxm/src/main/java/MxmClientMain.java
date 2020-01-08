@@ -1,6 +1,5 @@
 import org.mbari.mxm.client.MxmClient;
-import org.mbari.mxm.client.model;
-import org.mbari.mxm.client.model.Executor;
+import org.mbari.mxm.client.model.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,9 +37,9 @@ public class MxmClientMain {
         
         x.missionTemplates.forEach( mtBasic -> {
           // more detailed info about each mission template:
-          Optional<model.MissionTemplate> omt = mxm.getExecutorMissionTemplate(x.executorId, mtBasic.missionTplId);
+          Optional<MissionTemplate> omt = mxm.getExecutorMissionTemplate(x.executorId, mtBasic.missionTplId);
           if (omt.isPresent()) {
-            model.MissionTemplate mt = omt.get();
+            MissionTemplate mt = omt.get();
             show("MISSION TEMPLATE missionTplId='" + mtBasic.missionTplId + "'", mt);
           }
           else {
@@ -48,15 +47,15 @@ public class MxmClientMain {
           }
 
           // general info about missions from this executor:
-          List<model.Mission> missions = mxm.getExecutorMissions(x.executorId, mtBasic.missionTplId);
+          List<Mission> missions = mxm.getExecutorMissions(x.executorId, mtBasic.missionTplId);
           show("missions for missionTplId='" + mtBasic.missionTplId + "'", missions);
 
           missions.forEach( mBasic -> {
             // more detailed info about each mission:
-            Optional<model.Mission> om = mxm.getMission(x.executorId, mtBasic.missionTplId, mBasic.missionId);
+            Optional<Mission> om = mxm.getMission(x.executorId, mtBasic.missionTplId, mBasic.missionId);
             String label = String.format("MISSION missionTplId='%s' missionId='%s'", mtBasic.missionTplId, mBasic.missionId);
             if (om.isPresent()) {
-              model.Mission m = om.get();
+              Mission m = om.get();
               show(label, m);
             }
             else {
