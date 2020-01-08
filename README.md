@@ -22,7 +22,7 @@ and the
 [Google Gson](https://search.maven.org/artifact/com.google.code.gson/gson/2.8.6/jar)
 libraries in your CLASSPATH.
 
-As indicated in the included [demo program](src/main/java/MxmClientMain.java),
+As indicated in the included [demo program](mxm/src/main/java/MxmClientMain.java),
 you construct an instance of the `MxmClient` class providing the URL of the MXM endpoint,
 and then make queries and requests as needed:
 
