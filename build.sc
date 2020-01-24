@@ -10,7 +10,7 @@ import mill._, scalalib._
 
 object mxm extends JavaModule {
     val name = "mxm-client"
-    val version = "0.1.1"
+    val version = "0.1.2"
 
     def mainClass = Some("MxmClientMain")
 

@@ -1,6 +1,6 @@
 {
-  allExecutorsList {
-    executorId
+  allProvidersList {
+    providerId
     description
     httpEndpoint
     apiType

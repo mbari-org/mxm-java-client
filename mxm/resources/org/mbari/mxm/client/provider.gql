@@ -1,0 +1,23 @@
+query provider($providerId: String!) {
+  providerByProviderId(providerId: $providerId) {
+    providerId
+    description
+    httpEndpoint
+    apiType
+    canValidate
+    usesSched
+    usesUnits
+    missionTplsByProviderIdList {
+      missionTplId
+      description
+      missionTplAssetClassesByProviderIdAndMissionTplIdList {
+        assetClassName
+        assetClassByProviderIdAndAssetClassName {
+          assetsByProviderIdAndClassNameList {
+            assetId
+          }
+        }
+      }
+    }
+  }
+}

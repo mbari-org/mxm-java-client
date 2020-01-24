@@ -24,8 +24,8 @@ public class model {
   /**
    * Information about a registered mission execution system.
    */
-  public static class Executor extends ModelBase {
-    public String executorId;
+  public static class Provider extends ModelBase {
+    public String providerId;
     public String description;
     public String httpEndpoint;
     public String apiType;
@@ -33,7 +33,7 @@ public class model {
     public boolean usesSched;
     public boolean usesUnits;
   
-    @SerializedName(value="missionTemplates", alternate={"missionTplsByExecutorIdList"})
+    @SerializedName(value="missionTemplates", alternate={"missionTplsByProviderIdList"})
     public List<MissionTemplate> missionTemplates;
   }
   
@@ -44,10 +44,10 @@ public class model {
     public String missionTplId;
     public String description;
   
-    @SerializedName(value="assetClasses", alternate={"missionTplAssetClassesByExecutorIdAndMissionTplIdList"})
+    @SerializedName(value="assetClasses", alternate={"missionTplAssetClassesByProviderIdAndMissionTplIdList"})
     public List<AssetClass> assetClasses;
   
-    @SerializedName(value="parameters", alternate={"parametersByExecutorIdAndMissionTplIdList"})
+    @SerializedName(value="parameters", alternate={"parametersByProviderIdAndMissionTplIdList"})
     public List<Parameter> parameters;
   }
   
@@ -75,13 +75,13 @@ public class model {
    * Information about a particular mission.
    */
   public static class Mission extends ModelBase {
-    public String executorId;
+    public String providerId;
     public String missionTplId;
     public String missionId;
     public String assetId;
     public String description;
     
-    @SerializedName(value="arguments", alternate={"argumentsByExecutorIdAndMissionTplIdAndMissionIdList"})
+    @SerializedName(value="arguments", alternate={"argumentsByProviderIdAndMissionTplIdAndMissionIdList"})
     public List<Argument> arguments;
   }
   

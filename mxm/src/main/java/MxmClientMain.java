@@ -13,31 +13,31 @@ import java.util.Optional;
  * you can run it on the command line like this:
  *
  * <code>
- *   java MxmClientMain http://tsauv.shore.mbari.org/mxm-graphql
+ *   java MxmClientMain http://mxm.shore.mbari.org/mxm-graphql
  * </code>
  */
 public class MxmClientMain {
   public static void main(String[] args) {
-    String endpoint = args.length == 1 ? args[0] : "http://tsauv.shore.mbari.org/mxm-graphql";
+    String endpoint = args.length == 1 ? args[0] : "http://mxm.shore.mbari.org/mxm-graphql";
   
     System.out.println("mxm-client library version: " + MxmClient.getVersion());
     
     MxmClient mxm = new MxmClient(endpoint);
     
-    // general info about executors:
-    List<Executor> executors = mxm.getExecutors();
-    show("all executors response", executors);
+    // general info about providers:
+    List<Provider> providers = mxm.getProviders();
+    show("all providers response", providers);
 
-    executors.forEach(e -> {
-      // more detailed info about each executor:
-      Optional<Executor> ox = mxm.getExecutor(e.executorId);
+    providers.forEach(e -> {
+      // more detailed info about each provider:
+      Optional<Provider> ox = mxm.getProvider(e.providerId);
       if (ox.isPresent()) {
-        Executor x = ox.get();
-        show("EXECUTOR executorId='" + e.executorId + "'", x);
+        Provider x = ox.get();
+        show("PROVIDER providerId='" + e.providerId + "'", x);
         
         x.missionTemplates.forEach( mtBasic -> {
           // more detailed info about each mission template:
-          Optional<MissionTemplate> omt = mxm.getExecutorMissionTemplate(x.executorId, mtBasic.missionTplId);
+          Optional<MissionTemplate> omt = mxm.getProviderMissionTemplate(x.providerId, mtBasic.missionTplId);
           if (omt.isPresent()) {
             MissionTemplate mt = omt.get();
             show("MISSION TEMPLATE missionTplId='" + mtBasic.missionTplId + "'", mt);
@@ -46,13 +46,13 @@ public class MxmClientMain {
             show("MISSION TEMPLATE missionTplId='" + mtBasic.missionTplId + "'", "not found");
           }
 
-          // general info about missions from this executor:
-          List<Mission> missions = mxm.getExecutorMissions(x.executorId, mtBasic.missionTplId);
+          // general info about missions from this provider:
+          List<Mission> missions = mxm.getProviderMissions(x.providerId, mtBasic.missionTplId);
           show("missions for missionTplId='" + mtBasic.missionTplId + "'", missions);
 
           missions.forEach( mBasic -> {
             // more detailed info about each mission:
-            Optional<Mission> om = mxm.getMission(x.executorId, mtBasic.missionTplId, mBasic.missionId);
+            Optional<Mission> om = mxm.getMission(x.providerId, mtBasic.missionTplId, mBasic.missionId);
             String label = String.format("MISSION missionTplId='%s' missionId='%s'", mtBasic.missionTplId, mBasic.missionId);
             if (om.isPresent()) {
               Mission m = om.get();
@@ -65,7 +65,7 @@ public class MxmClientMain {
         });
       }
       else {
-        show("executor executorId='" + e.executorId + "'","not found");
+        show("provider providerId='" + e.providerId + "'","not found");
       }
     });
   }

@@ -1,14 +1,14 @@
-query ($executorId: String!, $missionTplId: String!) {
-  missionTplByExecutorIdAndMissionTplId(executorId: $executorId, missionTplId: $missionTplId) {
+query ($providerId: String!, $missionTplId: String!) {
+  missionTplByProviderIdAndMissionTplId(providerId: $providerId, missionTplId: $missionTplId) {
     missionTplId
     description
-    missionTplAssetClassesByExecutorIdAndMissionTplIdList {
+    missionTplAssetClassesByProviderIdAndMissionTplIdList {
       assetClassName
-      assetClassByExecutorIdAndAssetClassName {
+      assetClassByProviderIdAndAssetClassName {
         description
       }
     }
-    parametersByExecutorIdAndMissionTplIdList(orderBy: PARAM_ORDER_ASC) {
+    parametersByProviderIdAndMissionTplIdList(orderBy: PARAM_ORDER_ASC) {
       paramName
       type
       required
