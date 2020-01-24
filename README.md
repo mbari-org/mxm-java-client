@@ -30,13 +30,13 @@ and then make queries and requests as needed:
 MxmClient mxm = new MxmClient("http://mxm.shore.mbari.org/mxm-graphql");
 
 // general info about providers:
-List<provider> providers = mxm.getproviders();
+List<Provider> providers = mxm.getProviders();
 ...
 // more detailed info about a particular provider:
-Optional<provider> ox = mxm.getprovider("foo-provider");
+Optional<Provider> ox = mxm.getProvider("foo-provider");
 ...
 // detailed info about a mission template:
-Optional<MissionTemplate> omt = mxm.getproviderMissionTemplate("foo-provider", "bar-mtempl");
+Optional<MissionTemplate> omt = mxm.getProviderMissionTemplate("foo-provider", "bar-mtempl");
 ...
 // detailed info about a mission:
 Optional<Mission> omt = mxm.getMission("foo-provider", "bar-mtempl", "some-mission");
