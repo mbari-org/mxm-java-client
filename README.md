@@ -110,3 +110,17 @@ mxm-client library version: 0.1.1
           ]
         },
 ```
+
+## deployment
+
+### javadoc
+
+```
+MXM_VERSION=0.1.2
+JAR="mxm-java-client-${MXM_VERSION}-javadoc.jar"
+scp ${JAR} mxmadmin@mxm.shore.mbari.org:/var/www/html/java-client-doc/javadoc.jar && \
+ssh mxmadmin@mxm.shore.mbari.org <<'EOF'
+  cd /var/www/html/java-client-doc/
+  unzip -o ./javadoc.jar
+EOF
+```

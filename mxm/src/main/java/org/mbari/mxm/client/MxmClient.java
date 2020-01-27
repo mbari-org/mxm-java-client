@@ -27,19 +27,24 @@ import java.util.*;
 /**
  * High-level MXM API Client.
  *
- * <br><br>
- * <b>Status: Preliminary</b>
- * <br><br>
+ * <p>
+ * Status: <b>Preliminary</b>. Only read-only operations at the moment.
+ * </p>
  *
- * You can use this to retrieve information about available "providers"
+ * <p>
+ * Currently, you can use this to retrieve information about available "providers"
  * (i.e., mission execution systems registered in the MXM service) including
  * associated mission templates, and their parameters and managed assets, as
- * well as missions
+ * well as missions.
+ * </p>
  *
- * Note that some fields in retrieved objects may be `null` or `Optional.empty()`
+ * <p>
+ * Note that some fields in retrieved objects may be <code>null</code>
+ * or <code>Optional.empty()</code>
  * depending on the particular MxmClient method used to retrieve the object.
  * In general, more shallow information is provided when the operation is related
  * with a list of items, and more detailed when specifically requesting a particular item.
+ * </p>
  */
 public class MxmClient {
   
@@ -56,6 +61,7 @@ public class MxmClient {
    * Creates an instance.
    *
    * @param endpoint  MXM API endpoint.
+   *                  Example: <code>"http://mxm.shore.mbari.org/mxm-graphql"</code>
    */
   public MxmClient(String endpoint) {
     this.endpoint = endpoint;
