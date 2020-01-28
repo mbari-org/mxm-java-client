@@ -14,6 +14,8 @@ script:
   - MXM_VERSION=$(git describe --tags | cut -c 2-)
   - cp out/mxm/jar/dest/out.jar    ./mxm-java-client-${MXM_VERSION}.jar
   - cp out/mxm/docJar/dest/out.jar ./mxm-java-client-${MXM_VERSION}-javadoc.jar
+  - echo "MXM_VERSION= $MXM_VERSION"
+  - ls -lrt
 
 before_deploy:
   - MXM_VERSION=$(git describe --tags | cut -c 2-)
@@ -26,8 +28,9 @@ deploy:
     secure: QStbxHfmRxV9i1ruYME/XaWqg09NWwGYfd8geh9tOw0lkzCeMHvKnEVyIVI6/HbDuf9OrLmqAkHDz898e717T2Anfv9z9eHEatQ5jAPTqmfqkviJiGcMNnClFgQ37LoZ+5ZQ/ib0na781TMMO5fR8wrJG4BFHXQkM6c+RB5CD656PUn+6bwVhOUC8Y/c4aSDkkRea45pqX/jtVHSgmirxpzaIcWGFmrIUDnYEMSv5g7Ok81D7I9qcIMnOxZbORP00nvaYciAZgSIehhwyjk82p6i8dgfPuuSbPy3Odz6+9Rt2CKE9mbFlbPgBHN5h2q39aqnwyKd4dZYWmGdT7jMUHpWC0gmkUMSOJM/JRYd2dM6CTt9vb1WilpnOaCYVNgvdNIwNRvLZyLdLQNsBY8MjNuzAb+fr3ObV2hzJkGH0hrciFwTxsGcUNnrx/46FemU11jgKTs6uX/MkxRtr25eRVqIXy46KHZIbdhd3c8T8Oi8WoC5HZFaG1x6juqswN/6TXb0TzBzrLypwVIc7/Zf5vtu6fYRp6+ZevCy0UG0StZuBjxOTMncGhfhYJ6mh8EDNKVKH6n5H1KlvFU5MvRYy+OXTsWijzBPeNwTL3MIacTe7A0D4GXAc1h9Sso9DPsLXh0z6sCuDgt7cR6EZ0JpxEvjb+DoHRwBYcefk3tcjJQ=
   file: mxm-java-client-*.jar
   skip_cleanup: true
+  draft: true
   on:
-    tags: true
+    tags: false
     repo: mbari-org/mxm-java-client
 
 notifications:
