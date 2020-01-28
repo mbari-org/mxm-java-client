@@ -16,8 +16,6 @@ script:
   - ./mill mxm._
   - cp out/mxm/jar/dest/out.jar    ./mxm-java-client-${MXM_VERSION}.jar
   - cp out/mxm/docJar/dest/out.jar ./mxm-java-client-${MXM_VERSION}-javadoc.jar
-
-before_deploy:
   - ls -lrt
   - echo "MXM_VERSION = $MXM_VERSION"
 

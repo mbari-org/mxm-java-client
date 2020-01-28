@@ -119,7 +119,9 @@ mxm-client library version: 0.1.1
 
 ## Release
 
-General "release" steps:
+Note that automated releases are in place as part of enabled CI.
+
+###  manual release
 
 Set `MXM_VERSION` as needed.
 
@@ -131,11 +133,13 @@ Then upload the artifacts to github.
 
 ### javadoc
 
-    mill mxm.docJar
-    JAR="mxm-java-client-${MXM_VERSION}-javadoc.jar"
-    cp out/mxm/docJar/dest/out.jar ./mxm-java-client-${MXM_VERSION}-javadoc.jar
-    scp ${JAR} mxmadmin@mxm.shore.mbari.org:/var/www/html/java-client-doc/javadoc.jar && \
-    ssh mxmadmin@mxm.shore.mbari.org <<'EOF'
-      cd /var/www/html/java-client-doc/
-      unzip -o ./javadoc.jar
-    EOF
+The following is only a dev convenience to update the javadoc in our internal server.
+
+```
+mill mxm.docJar
+scp out/mxm/docJar/dest/out.jar mxmadmin@mxm.shore.mbari.org:/var/www/html/java-client-doc/javadoc.jar && \
+ssh mxmadmin@mxm.shore.mbari.org <<'EOF'
+  cd /var/www/html/java-client-doc/
+  unzip -o ./javadoc.jar
+EOF
+```
