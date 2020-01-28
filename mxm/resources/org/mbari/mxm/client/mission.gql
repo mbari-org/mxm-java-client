@@ -16,6 +16,7 @@ query mission($providerId: String!, $missionTplId: String!, $missionId: String!)
     argumentsByProviderIdAndMissionTplIdAndMissionIdList {
       paramName
       paramValue
+      paramUnits
       parameterByProviderIdAndMissionTplIdAndParamName {
         type
         required

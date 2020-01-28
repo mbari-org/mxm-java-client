@@ -1,4 +1,6 @@
-2020-01-24
+2020-01
+
+- 0.1.3: some code reorg
 
 - 0.1.2: reflect executor-to-provider renaming,
   and use mxm.shore as endpoint for the demo

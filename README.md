@@ -23,7 +23,7 @@ and the
 libraries in your CLASSPATH.
 
 As indicated in the included [demo program](mxm/src/main/java/MxmClientMain.java),
-you construct an instance of the `MxmClient` class providing the URL of the MXM endpoint,
+you will construct an instance of the `MxmClient` class providing the URL of the MXM endpoint,
 and then make queries and requests as needed:
 
 ```java
@@ -53,6 +53,10 @@ The corresponding MXM API endpoint is `http://mxm.shore.mbari.org/mxm-graphql`.
 
 A [GraphiQL](https://github.com/graphql/graphiql) interface is available
 at http://mxm.shore.mbari.org/mxm-graphiql.
+This is **highly recommended** as a great tool for general inspection of the
+available information, and in particular to then let us know about pieces of
+information that should be included and/or that may not yet be visible through
+this client library.
 
 ## Demo program
 
@@ -111,16 +115,25 @@ mxm-client library version: 0.1.1
         },
 ```
 
-## deployment
+## Release
+
+General "release" steps:
+
+    mill mxm._
+    MXM_VERSION=0.1.3
+    cp out/mxm/jar/dest/out.jar    ./mxm-java-client-${MXM_VERSION}.jar
+    cp out/mxm/docJar/dest/out.jar ./mxm-java-client-${MXM_VERSION}-javadoc.jar 
+
+Then upload the artifacts to github.
 
 ### javadoc
 
-```
-MXM_VERSION=0.1.2
-JAR="mxm-java-client-${MXM_VERSION}-javadoc.jar"
-scp ${JAR} mxmadmin@mxm.shore.mbari.org:/var/www/html/java-client-doc/javadoc.jar && \
-ssh mxmadmin@mxm.shore.mbari.org <<'EOF'
-  cd /var/www/html/java-client-doc/
-  unzip -o ./javadoc.jar
-EOF
-```
+    mill mxm.docJar
+    MXM_VERSION=0.1.3
+    JAR="mxm-java-client-${MXM_VERSION}-javadoc.jar"
+    cp out/mxm/docJar/dest/out.jar ./mxm-java-client-${MXM_VERSION}-javadoc.jar
+    scp ${JAR} mxmadmin@mxm.shore.mbari.org:/var/www/html/java-client-doc/javadoc.jar && \
+    ssh mxmadmin@mxm.shore.mbari.org <<'EOF'
+      cd /var/www/html/java-client-doc/
+      unzip -o ./javadoc.jar
+    EOF
