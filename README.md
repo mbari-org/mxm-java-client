@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mbari-org/mxm-java-client.svg?branch=master)](https://travis-ci.org/mbari-org/mxm-java-client)
+
 # MXM Java Client Library
 
 This project's goal is to build a client library to allow tools and
