@@ -1,5 +1,6 @@
 2020-01
 
+- enable automated release upon tag push
 - 0.1.3: some code reorg
 
 - 0.1.2: reflect executor-to-provider renaming,
