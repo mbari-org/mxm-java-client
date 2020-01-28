@@ -121,8 +121,9 @@ mxm-client library version: 0.1.1
 
 General "release" steps:
 
+Set `MXM_VERSION` as needed.
+
     mill mxm._
-    MXM_VERSION=0.1.3
     cp out/mxm/jar/dest/out.jar    ./mxm-java-client-${MXM_VERSION}.jar
     cp out/mxm/docJar/dest/out.jar ./mxm-java-client-${MXM_VERSION}-javadoc.jar 
 
@@ -131,7 +132,6 @@ Then upload the artifacts to github.
 ### javadoc
 
     mill mxm.docJar
-    MXM_VERSION=0.1.3
     JAR="mxm-java-client-${MXM_VERSION}-javadoc.jar"
     cp out/mxm/docJar/dest/out.jar ./mxm-java-client-${MXM_VERSION}-javadoc.jar
     scp ${JAR} mxmadmin@mxm.shore.mbari.org:/var/www/html/java-client-doc/javadoc.jar && \

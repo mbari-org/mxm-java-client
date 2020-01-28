@@ -55,7 +55,7 @@ public class MxmClient {
    */
   public static String getVersion() {
     // TODO capture this at build type
-    return "0.1.3";
+    return "0.1.4";
   }
   
   /**

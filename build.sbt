@@ -2,7 +2,7 @@ lazy val mxm = project.in(file("mxm"))
   .settings(
     organization := "org.mbari",
     name := "mxm-java-client",
-    version := "0.1.3",
+    version := "0.1.4",
 
     resourceDirectory in Compile := baseDirectory.value / "resources",
 
