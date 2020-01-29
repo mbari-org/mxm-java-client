@@ -9,15 +9,16 @@ cache:
 git:
   depth: 3
 
-env:
-  global:
-    - MXM_VERSION=${TRAVIS_TAG}
 script:
   - ./mill mxm._
+  - MXM_VERSION=$(echo "${TRAVIS_TAG}" | cut -c 2-)
   - cp out/mxm/jar/dest/out.jar    ./mxm-java-client-${MXM_VERSION}.jar
   - cp out/mxm/docJar/dest/out.jar ./mxm-java-client-${MXM_VERSION}-javadoc.jar
   - ls -lrt
   - echo "MXM_VERSION = ${MXM_VERSION}"
+
+before_deploy:
+  - MXM_VERSION=$(echo "${TRAVIS_TAG}" | cut -c 2-)
 
 deploy:
   provider: releases
