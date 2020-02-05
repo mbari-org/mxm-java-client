@@ -3,7 +3,8 @@
 # MXM Java Client Library
 
 This project's goal is to build a client library to allow tools and
-applications on the JVM to interact with an MXM service.
+applications on the JVM to interact with mission execution systems ("providers")
+through an MXM service.
 
 **Status**:
 
