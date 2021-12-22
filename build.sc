@@ -15,8 +15,8 @@ object mxm extends JavaModule {
     def mainClass = Some("MxmClientMain")
 
     override def ivyDeps = Agg(
-        ivy"org.apache.httpcomponents:httpclient:4.5.10",
-        ivy"com.google.code.gson:gson:2.8.6",
+        ivy"org.apache.httpcomponents:httpclient:4.5.13",
+        ivy"com.google.code.gson:gson:2.8.9",
         ivy"org.apache.commons:commons-io:1.3.2",
     )
 

@@ -1,3 +1,8 @@
+2021-12
+
+- update dependencies per snyk report
+  gson, httpclient
+
 2020-01
 
 - enable automated release upon tag push

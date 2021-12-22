@@ -7,8 +7,8 @@ lazy val mxm = project.in(file("mxm"))
     resourceDirectory in Compile := baseDirectory.value / "resources",
 
     libraryDependencies ++= Seq(
-        "org.apache.httpcomponents" % "httpclient" % "4.5.10",
-        "com.google.code.gson" % "gson" % "2.8.5",
+        "org.apache.httpcomponents" % "httpclient" % "4.5.13",
+        "com.google.code.gson" % "gson" % "2.8.9",
         "org.apache.commons" % "commons-io" % "1.3.2",
     ),
 
