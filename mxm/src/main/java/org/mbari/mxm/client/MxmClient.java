@@ -47,7 +47,7 @@ import java.util.*;
  * </p>
  */
 public class MxmClient {
-  
+
   /**
    * Returns the version of the mxm-client library.
    *
@@ -55,9 +55,9 @@ public class MxmClient {
    */
   public static String getVersion() {
     // TODO capture this at build type
-    return "0.1.6";
+    return "0.2.0";
   }
-  
+
   /**
    * Creates an instance.
    *
@@ -67,7 +67,7 @@ public class MxmClient {
   public MxmClient(String endpoint) {
     this.endpoint = endpoint;
   }
-  
+
   /**
    * Gets basic info about the registered mission execution systems.
    *
@@ -78,22 +78,22 @@ public class MxmClient {
     String s = getResponse(null, query, null);
 
     GetProvidersResponse res = gson.fromJson(s, GetProvidersResponse.class);
-  
+
     if (res.errors != null) {
       throw new MxmClientException("Errors reported: " + gson.toJson(res.errors));
     }
-  
+
     if (res.data == null) {
       throw new MxmClientException("Expecting 'data' object member in response");
     }
-  
+
     if (res.data.allProvidersList == null) {
       throw new MxmClientException("Expecting 'allProvidersList' list member in data.");
     }
-  
+
     return res.data.allProvidersList;
   }
-  
+
   /**
    * Gets details about a registered mission execution system.
    *
@@ -104,13 +104,13 @@ public class MxmClient {
     String query = getQuery("provider.gql");
     Map<String, String> variables = new HashMap<>();
     variables.put("providerId", providerId);
-  
+
     String s = getResponse("provider", query, variables);
     GetProviderResponse res = gson.fromJson(s, GetProviderResponse.class);
-    
+
     return Optional.ofNullable(res.data.providerByProviderId);
   }
-  
+
   /**
    * Gets a particular mission template.
    *
@@ -123,24 +123,24 @@ public class MxmClient {
     Map<String, String> variables = new HashMap<>();
     variables.put("providerId", providerId);
     variables.put("missionTplId", missionTplId);
-    
+
     String s = getResponse(null, query, variables);
 
 //    System.out.println("BARE RES:\n  | " + gson.toJson(gson.fromJson(s, Map.class)).replaceAll("\n", "\n  | "));
-    
+
     GetMissionTemplateResponse res = gson.fromJson(s, GetMissionTemplateResponse.class);
-    
+
     if (res.errors != null) {
       throw new MxmClientException("Errors reported: " + gson.toJson(res.errors));
     }
-    
+
     if (res.data == null) {
       throw new MxmClientException("Expecting 'data' object member in response");
     }
-    
+
     return Optional.ofNullable(res.data.missionTplByProviderIdAndMissionTplId);
   }
-  
+
   /**
    * Gets basic info about the mission instances of a given mission template.
    *
@@ -156,25 +156,25 @@ public class MxmClient {
     String s = getResponse("missions", query, variables);
 
 //    System.out.println("BARE RES:\n  | " + gson.toJson(gson.fromJson(s, Map.class)).replaceAll("\n", "\n  | "));
-  
+
     GetProviderMissionsResponse res = gson.fromJson(s, GetProviderMissionsResponse.class);
-  
+
     if (res.errors != null) {
       throw new MxmClientException("Errors reported: " + gson.toJson(res.errors));
     }
-  
+
     if (res.data == null) {
       throw new MxmClientException("Expecting 'data' object member in response");
     }
-  
+
     if (res.data.allMissionsList == null) {
       throw new MxmClientException("Expecting 'allMissionsList' list member in data.");
     }
-  
+
     return res.data.allMissionsList;
-  
+
   }
-  
+
   /**
    * Gets details about a particular mission.
    *
@@ -189,36 +189,36 @@ public class MxmClient {
     variables.put("providerId", providerId);
     variables.put("missionTplId", missionTplId);
     variables.put("missionId", missionId);
-  
+
     String s = getResponse("mission", query, variables);
 
 //    System.out.println("BARE RES:\n  | " + gson.toJson(gson.fromJson(s, Map.class)).replaceAll("\n", "\n  | "));
-  
+
     GetMissionResponse res = gson.fromJson(s, GetMissionResponse.class);
-  
+
     if (res.errors != null) {
       throw new MxmClientException("Errors reported: " + gson.toJson(res.errors));
     }
-  
+
     if (res.data == null) {
       throw new MxmClientException("Expecting 'data' object member in response");
     }
-  
+
     return Optional.ofNullable(res.data.missionByProviderIdAndMissionTplIdAndMissionId);
   }
-  
+
   private String getResponse(String operationName, String query, Map<String, String> variables) {
     HttpRequestBase req = createRequest(operationName, query, variables);
     HttpResponse httpResponse = makeRequest(req);
     return getResponseContent(httpResponse);
   }
-  
+
   private HttpRequestBase createRequest(String operationName, String query, Map<String, String> variables) {
     URI uri = makeQueryUri(query);
     HttpPost req = new HttpPost(uri);
-    
+
     List<String> attrs = new ArrayList<>();
-    
+
     if (operationName != null) {
       attrs.add("\"operationName\": \"" + operationName + "\"");
     }
@@ -226,7 +226,7 @@ public class MxmClient {
       attrs.add("\"variables\": " + gson.toJson(variables).replaceAll("\n", "\n  "));
     }
     attrs.add("\"query\": \"" + query.replaceAll("\n", "\\\n") + "\"");
-    
+
     String body = "{\n  " + String.join(",\n  ", attrs) + "\n}";
 
 //    System.out.println("body:\n  " + body.replaceAll("\n", "\n  "));
@@ -234,7 +234,7 @@ public class MxmClient {
     req.setEntity(entity);
     return req;
   }
-  
+
   private URI makeQueryUri(String query) {
     try {
       URIBuilder builder = new URIBuilder(endpoint);
@@ -245,7 +245,7 @@ public class MxmClient {
       throw new MxmClientException("unexpected", ex);
     }
   }
-  
+
   private String getQuery(String resourceName) {
     ClassLoader cl = getClass().getClassLoader();
     String name = "org/mbari/mxm/client/" + resourceName;
@@ -260,9 +260,9 @@ public class MxmClient {
       throw new MxmClientException("unexpected", ex);
     }
   }
-  
+
   private final String endpoint;
-  
+
   private static HttpResponse makeRequest(HttpRequestBase request) {
     request.setHeader("Content-type", "application/json");
     request.setHeader("Accept", "application/json");
@@ -280,7 +280,7 @@ public class MxmClient {
       throw new MxmClientException("error executing request", ex);
     }
   }
-  
+
   private static String getResponseContent(HttpResponse httpResponse)  {
     try {
       final InputStream is = httpResponse.getEntity().getContent();
@@ -292,51 +292,51 @@ public class MxmClient {
       throw new MxmClientException("error processing response content", ex);
     }
   }
-  
+
   private static class GetProvidersResponse {
     Data data;
     Object errors;
-    
+
     static class Data {
       List<Provider> allProvidersList;
     }
   }
-  
+
   private static class GetProviderResponse {
     Data data;
     Object errors;
-    
+
     static class Data {
       Provider providerByProviderId;
     }
   }
-  
+
   private static class GetMissionTemplateResponse {
     Data data;
     Object errors;
-    
+
     static class Data {
       MissionTemplate missionTplByProviderIdAndMissionTplId;
     }
   }
-  
+
   private static class GetProviderMissionsResponse {
     Data data;
     Object errors;
-    
+
     static class Data {
       List<Mission> allMissionsList;
     }
   }
-  
+
   private static class GetMissionResponse {
     Data data;
     Object errors;
-    
+
     static class Data {
       Mission missionByProviderIdAndMissionTplIdAndMissionId;
     }
   }
-  
+
   static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 }

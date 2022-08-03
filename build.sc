@@ -10,13 +10,13 @@ import mill._, scalalib._
 
 object mxm extends JavaModule {
     val name = "mxm-client"
-    val version = "0.1.6"
+    val version = "0.2.0"
 
     def mainClass = Some("MxmClientMain")
 
     override def ivyDeps = Agg(
         ivy"org.apache.httpcomponents:httpclient:4.5.13",
-        ivy"com.google.code.gson:gson:2.8.9",
+        ivy"com.google.code.gson:gson:2.9.1",
         ivy"org.apache.commons:commons-io:1.3.2",
     )
 

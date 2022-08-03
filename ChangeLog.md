@@ -1,3 +1,11 @@
+2022-08
+
+- re-exercised demo program (`mill mxm.run`)
+- updated gson to 2.9.0
+- use dependencyOverrides to address snyk reported vulnerability in commons-codec:commons-codec@1.11
+  via org.apache.httpcomponents:httpclient@4.5.13 (no more recent httpclient version in maven central)
+- TODO just use sbt (or even maven or gradle); remove mill
+
 2021-12
 
 - update dependencies per snyk report

@@ -2,15 +2,16 @@ lazy val mxm = project.in(file("mxm"))
   .settings(
     organization := "org.mbari",
     name := "mxm-java-client",
-    version := "0.1.6",
+    version := "0.2.0",
 
     resourceDirectory in Compile := baseDirectory.value / "resources",
 
     libraryDependencies ++= Seq(
         "org.apache.httpcomponents" % "httpclient" % "4.5.13",
-        "com.google.code.gson" % "gson" % "2.8.9",
+        "com.google.code.gson" % "gson" % "2.9.1",
         "org.apache.commons" % "commons-io" % "1.3.2",
     ),
+    dependencyOverrides += "commons-codec" % "commons-codec" % "1.15",
 
     javacOptions in (Compile, compile) ++= Seq(
         "-source", "1.8", "-target", "1.8", "-g:lines"

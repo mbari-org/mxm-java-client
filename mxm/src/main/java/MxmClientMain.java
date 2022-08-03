@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * A simple main program demonstrating some of the operations against
+ * A simple main program demonstrating some operations against
  * an MXM service.
- *
+ * <p>
  * Assuming your CLASSPATH includes `mxm-java-client-x.y.z.jar` and
  * the httpclient and gson libraries,
  * you can run it on the command line like this:
- *
+ * <p>
  * <code>
  *   java MxmClientMain http://mxm.shore.mbari.org/mxm-graphql
  * </code>
@@ -19,11 +19,11 @@ import java.util.Optional;
 public class MxmClientMain {
   public static void main(String[] args) {
     String endpoint = args.length == 1 ? args[0] : "http://mxm.shore.mbari.org/mxm-graphql";
-  
+
     System.out.println("mxm-client library version: " + MxmClient.getVersion());
-    
+
     MxmClient mxm = new MxmClient(endpoint);
-    
+
     // general info about providers:
     List<Provider> providers = mxm.getProviders();
     show("all providers response", providers);
@@ -34,7 +34,7 @@ public class MxmClientMain {
       if (ox.isPresent()) {
         Provider x = ox.get();
         show("PROVIDER providerId='" + e.providerId + "'", x);
-        
+
         x.missionTemplates.forEach( mtBasic -> {
           // more detailed info about each mission template:
           Optional<MissionTemplate> omt = mxm.getProviderMissionTemplate(x.providerId, mtBasic.missionTplId);
@@ -69,7 +69,7 @@ public class MxmClientMain {
       }
     });
   }
-  
+
   private static void show(String title, Object o) {
     String s = "\n    " + o.toString().replaceAll("\n", "\n    ");
     System.out.println("\n==== " + title + " ====" + s);

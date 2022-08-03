@@ -1,3 +1,6 @@
 *.jar
 out/
 target/
+.metals
+.vscode
+.bloop
